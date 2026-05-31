@@ -20,9 +20,9 @@
 - [x] `.env.local` が `.gitignore` に含まれていることを確認する
 
 ### ✅ 完了確認
-- [ ] `pnpm lint` がエラーなしで完了する
-- [ ] `pnpm build` が成功し `out/` ディレクトリが生成される
-- [ ] `pnpm dev` でブラウザに Next.js のトップページが表示される
+- [x] `pnpm lint` がエラーなしで完了する
+- [x] `pnpm build` が成功し `out/` ディレクトリが生成される
+- [x] `pnpm dev` でブラウザに Next.js のトップページが表示される
 
 ---
 
