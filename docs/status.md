@@ -15,7 +15,7 @@
 - [x] `next.config.ts` に `output: 'export'` / `trailingSlash: true` / `images: { unoptimized: true }` を設定する
 - [x] Tailwind CSS の設定を確認する（create next-app で同時導入）
 - [x] Framer Motion を導入する（`pnpm add framer-motion`）
-- [ ] Recharts を導入する（`pnpm add recharts`）
+- [x] Recharts を導入する（`pnpm add recharts`）
 - [ ] `.env.example` を作成する（`NEXT_PUBLIC_` プレフィックス形式で）
 - [ ] `.env.local` が `.gitignore` に含まれていることを確認する
 
