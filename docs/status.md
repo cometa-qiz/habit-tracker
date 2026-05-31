@@ -17,7 +17,7 @@
 - [x] Framer Motion を導入する（`pnpm add framer-motion`）
 - [x] Recharts を導入する（`pnpm add recharts`）
 - [x] `.env.example` を作成する（`NEXT_PUBLIC_` プレフィックス形式で）
-- [ ] `.env.local` が `.gitignore` に含まれていることを確認する
+- [x] `.env.local` が `.gitignore` に含まれていることを確認する
 
 ### ✅ 完了確認
 - [ ] `pnpm lint` がエラーなしで完了する
