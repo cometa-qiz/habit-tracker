@@ -16,7 +16,7 @@
 - [x] Tailwind CSS の設定を確認する（create next-app で同時導入）
 - [x] Framer Motion を導入する（`pnpm add framer-motion`）
 - [x] Recharts を導入する（`pnpm add recharts`）
-- [ ] `.env.example` を作成する（`NEXT_PUBLIC_` プレフィックス形式で）
+- [x] `.env.example` を作成する（`NEXT_PUBLIC_` プレフィックス形式で）
 - [ ] `.env.local` が `.gitignore` に含まれていることを確認する
 
 ### ✅ 完了確認
