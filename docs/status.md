@@ -84,7 +84,7 @@
 
 ### データ層
 - [x] `useRecords.ts` フックを実装する
-- [ ] `src/utils/dateUtils.ts` に日付ユーティリティ関数を実装する
+- [x] `src/utils/dateUtils.ts` に日付ユーティリティ関数を実装する
 
 ### UI
 - [ ] `HabitCard.tsx` を実装する（チェックボタン・完了時のグレーアウト・取り消し線）
