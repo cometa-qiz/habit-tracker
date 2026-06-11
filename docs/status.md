@@ -94,7 +94,7 @@
 - [x] `BottomNav.tsx` を実装する（スマホ向けボトムナビゲーション）
 
 ### ✅ 完了確認
-- [ ] `pnpm build` が成功する
+- [x] `pnpm build` が成功する
 - [ ] 今日の曜日に設定された習慣だけが一覧に表示される
 - [ ] チェックするとFirestoreコンソールに `completed: true` のrecordが追加される
 - [ ] 再度チェックすると `completed: false` に戻る
