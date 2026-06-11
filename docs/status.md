@@ -91,7 +91,7 @@
 - [x] `ProgressBar.tsx` を実装する（達成率バー）
 - [x] `src/app/page.tsx` を実装する（今日の習慣一覧・達成率表示）
 - [x] `Header.tsx` を実装する（タイトル・サインアウトメニュー）
-- [ ] `BottomNav.tsx` を実装する（スマホ向けボトムナビゲーション）
+- [x] `BottomNav.tsx` を実装する（スマホ向けボトムナビゲーション）
 
 ### ✅ 完了確認
 - [ ] `pnpm build` が成功する
