@@ -59,7 +59,7 @@
 **ゴール: 習慣の登録・編集・削除がFirestoreに反映される**
 
 ### 型定義・データ層
-- [ ] `src/types/index.ts` に `Habit` / `Record` / `Summary` の型を定義する
+- [x] `src/types/index.ts` に `Habit` / `Record` / `Summary` の型を定義する
 - [ ] `src/lib/firestore.ts` に習慣の読み書き関数を実装する
 - [ ] `useHabits.ts` フックを実装する
 
