@@ -87,7 +87,7 @@
 - [x] `src/utils/dateUtils.ts` に日付ユーティリティ関数を実装する
 
 ### UI
-- [ ] `HabitCard.tsx` を実装する（チェックボタン・完了時のグレーアウト・取り消し線）
+- [x] `HabitCard.tsx` を実装する（チェックボタン・完了時のグレーアウト・取り消し線）
 - [ ] `ProgressBar.tsx` を実装する（達成率バー）
 - [ ] `src/app/page.tsx` を実装する（今日の習慣一覧・達成率表示）
 - [ ] `Header.tsx` を実装する（タイトル・サインアウトメニュー）
