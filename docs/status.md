@@ -83,7 +83,7 @@
 **ゴール: 今日の習慣をチェックするとFirestoreに記録される**
 
 ### データ層
-- [ ] `useRecords.ts` フックを実装する
+- [x] `useRecords.ts` フックを実装する
 - [ ] `src/utils/dateUtils.ts` に日付ユーティリティ関数を実装する
 
 ### UI

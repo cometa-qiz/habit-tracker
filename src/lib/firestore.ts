@@ -4,15 +4,17 @@ import {
   collection,
   doc,
   addDoc,
+  setDoc,
   updateDoc,
   onSnapshot,
   query,
+  where,
   orderBy,
   serverTimestamp,
   type Unsubscribe,
 } from 'firebase/firestore';
 import { db } from './firebase';
-import type { Habit } from '@/types';
+import type { Habit, Record as HabitRecord } from '@/types';
 
 const habitsCol = (userId: string) =>
   collection(db, 'users', userId, 'habits');
@@ -59,4 +61,42 @@ export const deleteHabit = async (
   habitId: string
 ): Promise<void> => {
   await updateHabit(userId, habitId, { isActive: false });
+};
+
+// ── records ──────────────────────────────────────────────
+
+const recordsCol = (userId: string) =>
+  collection(db, 'users', userId, 'records');
+
+export const subscribeToRecords = (
+  userId: string,
+  date: string,
+  callback: (records: HabitRecord[]) => void
+): Unsubscribe => {
+  const q = query(recordsCol(userId), where('date', '==', date));
+  return onSnapshot(q, (snapshot) => {
+    const records = snapshot.docs.map((d) => ({
+      id: d.id,
+      ...d.data(),
+    })) as HabitRecord[];
+    callback(records);
+  });
+};
+
+export const toggleRecord = async (
+  userId: string,
+  habitId: string,
+  date: string,
+  currentCompleted: boolean
+): Promise<void> => {
+  const recordId = `${date}_${habitId}`;
+  const ref = doc(db, 'users', userId, 'records', recordId);
+  const newCompleted = !currentCompleted;
+  await setDoc(ref, {
+    id: recordId,
+    habitId,
+    date,
+    completed: newCompleted,
+    completedAt: newCompleted ? serverTimestamp() : null,
+  });
 };
