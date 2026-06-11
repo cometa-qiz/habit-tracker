@@ -66,7 +66,7 @@
 ### UI
 - [x] `HabitForm.tsx` を実装する（名前・絵文字・メモ・カテゴリ・実施曜日）
 - [x] `src/app/habits/new/page.tsx` を実装する
-- [ ] `src/app/habits/edit/page.tsx` を実装する（habitIdは `useSearchParams()` で取得）
+- [x] `src/app/habits/edit/page.tsx` を実装する（habitIdは `useSearchParams()` で取得）
 - [ ] `HabitList.tsx` を実装する（一覧表示・編集リンク・削除ボタン）
 - [ ] `src/app/habits/page.tsx` を実装する
 
