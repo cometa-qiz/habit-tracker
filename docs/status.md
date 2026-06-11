@@ -61,7 +61,7 @@
 ### 型定義・データ層
 - [x] `src/types/index.ts` に `Habit` / `Record` / `Summary` の型を定義する
 - [x] `src/lib/firestore.ts` に習慣の読み書き関数を実装する
-- [ ] `useHabits.ts` フックを実装する
+- [x] `useHabits.ts` フックを実装する
 
 ### UI
 - [ ] `HabitForm.tsx` を実装する（名前・絵文字・メモ・カテゴリ・実施曜日）
