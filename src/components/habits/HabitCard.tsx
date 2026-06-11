@@ -1,5 +1,7 @@
 'use client';
 
+import { motion } from 'framer-motion';
+import CheckAnimation from '@/components/ui/CheckAnimation';
 import type { Habit } from '@/types';
 
 interface Props {
@@ -10,32 +12,21 @@ interface Props {
 
 export default function HabitCard({ habit, completed, onToggle }: Props) {
   return (
-    <li
+    <motion.li
+      layout
+      animate={{ opacity: completed ? 0.7 : 1 }}
+      transition={{ duration: 0.25 }}
       className={`flex items-center gap-4 rounded-xl border px-4 py-3 transition-colors ${
         completed
           ? 'border-slate-700 bg-slate-800/50'
           : 'border-slate-700 bg-slate-800'
       }`}
     >
-      {/* チェックボタン */}
-      <button
-        onClick={onToggle}
-        aria-label={completed ? 'チェックを外す' : 'チェックする'}
-        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
-          completed
-            ? 'border-indigo-500 bg-indigo-500 text-white'
-            : 'border-slate-500 bg-transparent hover:border-indigo-400'
-        }`}
-      >
-        {completed && (
-          <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-          </svg>
-        )}
-      </button>
+      {/* チェックボタン（アニメーション付き） */}
+      <CheckAnimation completed={completed} onToggle={onToggle} />
 
       {/* 絵文字 */}
-      <span className={`text-2xl ${completed ? 'opacity-40' : ''}`}>
+      <span className={`text-2xl transition-opacity ${completed ? 'opacity-40' : ''}`}>
         {habit.emoji}
       </span>
 
@@ -54,6 +45,6 @@ export default function HabitCard({ habit, completed, onToggle }: Props) {
           </p>
         )}
       </div>
-    </li>
+    </motion.li>
   );
 }

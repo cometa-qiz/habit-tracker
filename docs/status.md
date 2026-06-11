@@ -136,7 +136,7 @@
 
 ### アニメーション
 - [x] `CheckAnimation.tsx` を実装する（Framer Motionでチェック時アニメーション）
-- [ ] `HabitCard.tsx` にアニメーションを組み込む
+- [x] `HabitCard.tsx` にアニメーションを組み込む
 
 ### ストリーク
 - [ ] `useStreak.ts` フックを実装する（連続達成日数の計算ロジック）
