@@ -97,7 +97,7 @@
 - [x] `pnpm build` が成功する
 - [x] 今日の曜日に設定された習慣だけが一覧に表示される
 - [x] チェックするとFirestoreコンソールに `completed: true` のrecordが追加される
-- [ ] 再度チェックすると `completed: false` に戻る
+- [x] 再度チェックすると `completed: false` に戻る
 - [ ] 達成率が正しく計算されて表示される
 
 ---
