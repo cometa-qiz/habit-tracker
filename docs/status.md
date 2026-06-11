@@ -71,7 +71,7 @@
 - [x] `src/app/habits/page.tsx` を実装する
 
 ### ✅ 完了確認
-- [ ] `pnpm build` が成功する
+- [x] `pnpm build` が成功する
 - [ ] 習慣を新規登録するとFirestoreコンソールに追加される
 - [ ] 習慣を編集するとFirestoreコンソールの値が更新される
 - [ ] 習慣を削除すると `isActive: false` に更新される（物理削除されない）
