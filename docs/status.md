@@ -135,7 +135,7 @@
 **ゴール: チェックアニメーション・連続日数・グラフが表示される**
 
 ### アニメーション
-- [ ] `CheckAnimation.tsx` を実装する（Framer Motionでチェック時アニメーション）
+- [x] `CheckAnimation.tsx` を実装する（Framer Motionでチェック時アニメーション）
 - [ ] `HabitCard.tsx` にアニメーションを組み込む
 
 ### ストリーク
