@@ -60,7 +60,7 @@
 
 ### 型定義・データ層
 - [x] `src/types/index.ts` に `Habit` / `Record` / `Summary` の型を定義する
-- [ ] `src/lib/firestore.ts` に習慣の読み書き関数を実装する
+- [x] `src/lib/firestore.ts` に習慣の読み書き関数を実装する
 - [ ] `useHabits.ts` フックを実装する
 
 ### UI
