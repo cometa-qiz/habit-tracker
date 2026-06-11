@@ -115,7 +115,7 @@
   "deploy": "firebase deploy --only hosting"
   ```
 - [x] `pnpm firebase:login` でFirebaseにサインインする
-- [ ] `pnpm firebase:init` を実行し `out` ディレクトリを指定する
+- [x] `pnpm firebase:init` を実行し `out` ディレクトリを指定する
 - [ ] `firebase.json` の `public` が `"out"` になっていることを確認する
 
 ### デプロイ実行
