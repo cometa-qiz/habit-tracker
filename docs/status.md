@@ -116,7 +116,7 @@
   ```
 - [x] `pnpm firebase:login` でFirebaseにサインインする
 - [x] `pnpm firebase:init` を実行し `out` ディレクトリを指定する
-- [ ] `firebase.json` の `public` が `"out"` になっていることを確認する
+- [x] `firebase.json` の `public` が `"out"` になっていることを確認する
 
 ### デプロイ実行
 - [ ] `pnpm build` でビルドが成功することを確認する
