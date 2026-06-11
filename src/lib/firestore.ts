@@ -83,6 +83,21 @@ export const subscribeToRecords = (
   });
 };
 
+export const subscribeToHabitRecords = (
+  userId: string,
+  habitId: string,
+  callback: (records: HabitRecord[]) => void
+): Unsubscribe => {
+  const q = query(recordsCol(userId), where('habitId', '==', habitId));
+  return onSnapshot(q, (snapshot) => {
+    const records = snapshot.docs.map((d) => ({
+      id: d.id,
+      ...d.data(),
+    })) as HabitRecord[];
+    callback(records);
+  });
+};
+
 export const toggleRecord = async (
   userId: string,
   habitId: string,
