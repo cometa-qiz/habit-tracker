@@ -1,55 +1,66 @@
 'use client';
 
-import { useAuth } from "@/hooks/useAuth";
+import { useMemo } from 'react';
+import HabitCard from '@/components/habits/HabitCard';
+import ProgressBar from '@/components/ui/ProgressBar';
+import { useHabits } from '@/hooks/useHabits';
+import { useRecords } from '@/hooks/useRecords';
+import { getTodayString, getDayOfWeek } from '@/utils/dateUtils';
 
 export default function Home() {
-  const { user, loading, signOutUser } = useAuth();
+  const today = getTodayString();
+  const todayDow = getDayOfWeek(today);
 
-  if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-slate-900 text-white">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-indigo-500"></div>
-      </div>
-    );
-  }
+  const { habits, loading: habitsLoading } = useHabits();
+  const { records, loading: recordsLoading, toggle } = useRecords(today);
+
+  const todayHabits = useMemo(
+    () =>
+      habits.filter(
+        (h) => h.isActive && h.targetDays.includes(todayDow)
+      ),
+    [habits, todayDow]
+  );
+
+  const completedCount = useMemo(
+    () => todayHabits.filter((h) => records.get(h.id)?.completed).length,
+    [todayHabits, records]
+  );
+
+  const loading = habitsLoading || recordsLoading;
 
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-gradient-to-br from-slate-900 via-slate-850 to-indigo-950 px-4 font-sans text-white">
-      <main className="w-full max-w-md rounded-2xl bg-slate-800/80 p-8 shadow-2xl backdrop-blur-md border border-slate-700 text-center">
-        <div className="text-center mb-8">
-          <div className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-indigo-500/10 text-indigo-400 mb-4 border border-indigo-500/20">
-            <span className="text-3xl">🧘</span>
-          </div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">習慣トラッカー</h1>
-          <p className="text-slate-400 mt-2 text-sm">ログインに成功しました！</p>
-        </div>
+    <div className="min-h-screen bg-slate-900 px-4 py-8">
+      <div className="mx-auto max-w-md space-y-6">
+        <h1 className="text-xl font-bold text-white">今日の習慣</h1>
 
-        {user && (
-          <div className="mb-8 p-4 rounded-xl bg-slate-900/60 border border-slate-750 text-left space-y-3">
-            <div>
-              <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">ユーザー名</span>
-              <p className="text-base font-medium text-slate-200 mt-0.5">{user.displayName || "未設定"}</p>
-            </div>
-            <div>
-              <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">ユーザー ID (UID)</span>
-              <p className="text-xs font-mono text-slate-350 mt-0.5 break-all">{user.uid}</p>
-            </div>
-            {user.email && (
-              <div>
-                <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider">メールアドレス</span>
-                <p className="text-sm text-slate-200 mt-0.5">{user.email}</p>
-              </div>
+        {loading ? (
+          <div className="flex items-center justify-center py-20">
+            <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-300 border-t-indigo-500" />
+          </div>
+        ) : (
+          <>
+            <ProgressBar completed={completedCount} total={todayHabits.length} />
+
+            {todayHabits.length === 0 ? (
+              <p className="text-center text-slate-400 py-12">
+                今日の習慣はありません。
+              </p>
+            ) : (
+              <ul className="space-y-3">
+                {todayHabits.map((habit) => (
+                  <HabitCard
+                    key={habit.id}
+                    habit={habit}
+                    completed={records.get(habit.id)?.completed ?? false}
+                    onToggle={() => toggle(habit.id)}
+                  />
+                ))}
+              </ul>
             )}
-          </div>
+          </>
         )}
-
-        <button
-          onClick={signOutUser}
-          className="w-full rounded-xl bg-indigo-600 px-5 py-3 text-sm font-semibold text-white transition-all hover:bg-indigo-500 hover:shadow-lg hover:shadow-indigo-500/20 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 active:scale-[0.98] border border-indigo-500/30"
-        >
-          サインアウト
-        </button>
-      </main>
+      </div>
     </div>
   );
 }
