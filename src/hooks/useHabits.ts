@@ -10,21 +10,21 @@ import type { Habit } from '@/types';
 
 export const useHabits = () => {
   const { user } = useAuth();
-  const [habits, setHabits] = useState<Habit[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_habits, setHabits] = useState<Habit[]>([]);
+  const [_loading, setLoading] = useState(true);
+
+  const habits = user ? _habits : [];
+  const loading = user ? _loading : false;
 
   useEffect(() => {
-    if (!user) {
-      setHabits([]);
-      setLoading(false);
-      return;
-    }
+    if (!user) return;
 
     setLoading(true);
-    const unsubscribe = subscribeToHabits(user.uid, (data) => {
-      setHabits(data);
-      setLoading(false);
-    });
+    const unsubscribe = subscribeToHabits(
+      user.uid,
+      (data) => { setHabits(data); setLoading(false); },
+      () => { setLoading(false); }
+    );
 
     return () => unsubscribe();
   }, [user]);

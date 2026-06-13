@@ -21,16 +21,20 @@ const habitsCol = (userId: string) =>
 
 export const subscribeToHabits = (
   userId: string,
-  callback: (habits: Habit[]) => void
+  callback: (habits: Habit[]) => void,
+  onError?: (error: Error) => void
 ): Unsubscribe => {
   const q = query(habitsCol(userId), orderBy('order', 'asc'));
-  return onSnapshot(q, (snapshot) => {
-    const habits = snapshot.docs.map((d) => ({
-      id: d.id,
-      ...d.data(),
-    })) as Habit[];
-    callback(habits);
-  });
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      callback(snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as Habit)));
+    },
+    (error) => {
+      console.error('subscribeToHabits:', error);
+      onError?.(error);
+    }
+  );
 };
 
 export const addHabit = async (
@@ -71,16 +75,20 @@ const recordsCol = (userId: string) =>
 export const subscribeToRecords = (
   userId: string,
   date: string,
-  callback: (records: HabitRecord[]) => void
+  callback: (records: HabitRecord[]) => void,
+  onError?: (error: Error) => void
 ): Unsubscribe => {
   const q = query(recordsCol(userId), where('date', '==', date));
-  return onSnapshot(q, (snapshot) => {
-    const records = snapshot.docs.map((d) => ({
-      id: d.id,
-      ...d.data(),
-    })) as HabitRecord[];
-    callback(records);
-  });
+  return onSnapshot(
+    q,
+    (snapshot) => {
+      callback(snapshot.docs.map((d) => ({ id: d.id, ...d.data() } as HabitRecord)));
+    },
+    (error) => {
+      console.error('subscribeToRecords:', error);
+      onError?.(error);
+    }
+  );
 };
 
 export const subscribeToHabitRecords = (

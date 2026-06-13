@@ -41,15 +41,14 @@ const calculateStreak = (
 
 export const useStreak = (habit: Habit | null) => {
   const { user } = useAuth();
-  const [streak, setStreak] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [_streak, setStreak] = useState(0);
+  const [_loading, setLoading] = useState(true);
+
+  const streak = user && habit ? _streak : 0;
+  const loading = user && habit ? _loading : false;
 
   useEffect(() => {
-    if (!user || !habit) {
-      setStreak(0);
-      setLoading(false);
-      return;
-    }
+    if (!user || !habit) return;
 
     setLoading(true);
     const unsubscribe = subscribeToHabitRecords(user.uid, habit.id, (records) => {

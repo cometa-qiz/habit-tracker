@@ -5,12 +5,23 @@ import type { Habit } from '@/types';
 
 const DAYS = ['日', '月', '火', '水', '木', '金', '土'] as const;
 
+const LIMITS = {
+  name: 50,
+  memo: 100,
+  category: 20,
+} as const;
+
 type HabitFormData = Omit<Habit, 'id' | 'createdAt' | 'updatedAt'>;
 
 interface Props {
   initialValues?: Partial<HabitFormData>;
   onSubmit: (data: HabitFormData) => Promise<void>;
   onCancel: () => void;
+}
+
+interface FieldErrors {
+  name?: string;
+  targetDays?: string;
 }
 
 export default function HabitForm({ initialValues, onSubmit, onCancel }: Props) {
@@ -22,32 +33,44 @@ export default function HabitForm({ initialValues, onSubmit, onCancel }: Props) 
     initialValues?.targetDays ?? [0, 1, 2, 3, 4, 5, 6]
   );
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState('');
+  const [errors, setErrors] = useState<FieldErrors>({});
 
   const toggleDay = (day: number) => {
     setTargetDays((prev) =>
       prev.includes(day) ? prev.filter((d) => d !== day) : [...prev, day].sort()
     );
+    // 曜日を変更したらエラーをクリア
+    setErrors((prev) => ({ ...prev, targetDays: undefined }));
+  };
+
+  const validate = (): FieldErrors => {
+    const next: FieldErrors = {};
+    if (!name.trim()) {
+      next.name = '習慣名は必須です';
+    } else if (name.trim().length > LIMITS.name) {
+      next.name = `習慣名は${LIMITS.name}文字以内で入力してください`;
+    }
+    if (targetDays.length === 0) {
+      next.targetDays = '実施曜日を1つ以上選択してください';
+    }
+    return next;
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim()) {
-      setError('習慣名は必須です');
+    const next = validate();
+    if (Object.keys(next).length > 0) {
+      setErrors(next);
       return;
     }
-    if (name.trim().length > 50) {
-      setError('習慣名は50文字以内で入力してください');
-      return;
-    }
-    setError('');
+    setErrors({});
     setSubmitting(true);
     try {
       await onSubmit({
         name: name.trim(),
-        emoji,
-        memo,
-        category,
+        emoji: emoji.trim() || '✅',
+        memo: memo.trim(),
+        category: category.trim(),
         targetDays,
         isActive: initialValues?.isActive ?? true,
         order: initialValues?.order ?? 0,
@@ -58,7 +81,7 @@ export default function HabitForm({ initialValues, onSubmit, onCancel }: Props) 
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
       {/* 習慣名 */}
       <div>
         <label className="block text-sm font-medium text-slate-300 mb-1">
@@ -67,14 +90,24 @@ export default function HabitForm({ initialValues, onSubmit, onCancel }: Props) 
         <input
           type="text"
           value={name}
-          onChange={(e) => setName(e.target.value)}
-          maxLength={50}
+          onChange={(e) => {
+            setName(e.target.value);
+            setErrors((prev) => ({ ...prev, name: undefined }));
+          }}
+          maxLength={LIMITS.name}
           placeholder="例: 毎朝ストレッチ"
-          className="w-full rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          aria-invalid={!!errors.name}
+          className={`w-full rounded-lg bg-slate-700 border px-3 py-2 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 ${
+            errors.name ? 'border-red-500' : 'border-slate-600'
+          }`}
         />
-        <div className="flex justify-between mt-1">
-          {error && <p className="text-sm text-red-400">{error}</p>}
-          <p className="text-xs text-slate-500 ml-auto">{name.length}/50</p>
+        <div className="flex justify-between mt-1 min-h-[1.25rem]">
+          {errors.name && (
+            <p className="text-xs text-red-400" role="alert">{errors.name}</p>
+          )}
+          <p className={`text-xs ml-auto ${name.length >= LIMITS.name ? 'text-red-400' : 'text-slate-500'}`}>
+            {name.length}/{LIMITS.name}
+          </p>
         </div>
       </div>
 
@@ -97,9 +130,13 @@ export default function HabitForm({ initialValues, onSubmit, onCancel }: Props) 
           type="text"
           value={memo}
           onChange={(e) => setMemo(e.target.value)}
+          maxLength={LIMITS.memo}
           placeholder="例: 5分でOK"
           className="w-full rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
+        <p className={`text-xs mt-1 text-right ${memo.length >= LIMITS.memo ? 'text-red-400' : 'text-slate-500'}`}>
+          {memo.length}/{LIMITS.memo}
+        </p>
       </div>
 
       {/* カテゴリ */}
@@ -109,20 +146,27 @@ export default function HabitForm({ initialValues, onSubmit, onCancel }: Props) 
           type="text"
           value={category}
           onChange={(e) => setCategory(e.target.value)}
+          maxLength={LIMITS.category}
           placeholder="例: 健康"
           className="w-full rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
         />
+        <p className={`text-xs mt-1 text-right ${category.length >= LIMITS.category ? 'text-red-400' : 'text-slate-500'}`}>
+          {category.length}/{LIMITS.category}
+        </p>
       </div>
 
       {/* 実施曜日 */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-2">実施曜日</label>
-        <div className="flex gap-2">
+        <label className="block text-sm font-medium text-slate-300 mb-2">
+          実施曜日 <span className="text-red-400">*</span>
+        </label>
+        <div className="flex gap-1">
           {DAYS.map((label, i) => (
             <button
               key={i}
               type="button"
               onClick={() => toggleDay(i)}
+              aria-pressed={targetDays.includes(i)}
               className={`flex-1 rounded-lg py-2 text-sm font-medium transition-colors ${
                 targetDays.includes(i)
                   ? 'bg-indigo-600 text-white'
@@ -133,6 +177,9 @@ export default function HabitForm({ initialValues, onSubmit, onCancel }: Props) 
             </button>
           ))}
         </div>
+        {errors.targetDays && (
+          <p className="text-xs text-red-400 mt-1" role="alert">{errors.targetDays}</p>
+        )}
       </div>
 
       {/* ボタン */}

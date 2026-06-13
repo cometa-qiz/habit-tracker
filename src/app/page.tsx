@@ -3,11 +3,17 @@
 import { useMemo } from 'react';
 import HabitCard from '@/components/habits/HabitCard';
 import ProgressBar from '@/components/ui/ProgressBar';
+import { useAuth } from '@/hooks/useAuth';
 import { useHabits } from '@/hooks/useHabits';
 import { useRecords } from '@/hooks/useRecords';
+import { updateSummary } from '@/lib/summary';
+import { useToast } from '@/components/ui/Toaster';
 import { getTodayString, getDayOfWeek } from '@/utils/dateUtils';
+import { calcRate } from '@/utils/statsUtils';
 
 export default function Home() {
+  const { user } = useAuth();
+  const toast = useToast();
   const today = getTodayString();
   const todayDow = getDayOfWeek(today);
 
@@ -29,8 +35,29 @@ export default function Home() {
 
   const loading = habitsLoading || recordsLoading;
 
+  const handleToggle = (habitId: string) => {
+    const currentCompleted = records.get(habitId)?.completed ?? false;
+    toggle(habitId).then(() => {
+      if (!user) return;
+      // トグル後の完了数を楽観的に計算
+      const delta = currentCompleted ? -1 : 1;
+      const newCompleted = Math.max(0, Math.min(todayHabits.length, completedCount + delta));
+      const rate = calcRate(newCompleted, todayHabits.length);
+      updateSummary(user.uid, {
+        todayTotal: todayHabits.length,
+        todayCompleted: newCompleted,
+        todayRate: rate,
+        // topStreak はカード単位の useStreak に依存するため今週実績で代替
+        topStreak: { habitName: '', emoji: '', days: 0 },
+        weeklyRate: rate,
+      }).catch(() => undefined);
+    }).catch(() => {
+      toast('チェックの更新に失敗しました。再度お試しください。');
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-slate-900 px-4 py-8">
+    <div className="min-h-screen bg-slate-900 px-4 pt-6 pb-24">
       <div className="mx-auto max-w-md space-y-6">
         <h1 className="text-xl font-bold text-white">今日の習慣</h1>
 
@@ -53,7 +80,7 @@ export default function Home() {
                     key={habit.id}
                     habit={habit}
                     completed={records.get(habit.id)?.completed ?? false}
-                    onToggle={() => toggle(habit.id)}
+                    onToggle={() => handleToggle(habit.id)}
                   />
                 ))}
               </ul>

@@ -4,6 +4,8 @@ import "./globals.css";
 import AuthGuard from "@/components/AuthGuard";
 import Header from "@/components/layout/Header";
 import BottomNav from "@/components/layout/BottomNav";
+import { ToastProvider } from "@/components/ui/Toaster";
+import { AuthProvider } from "@/hooks/useAuth";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -30,12 +32,16 @@ export default function RootLayout({
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
-        <AuthGuard>
-          <Header />
-          <main className="flex-1 pb-16">{children}</main>
-          <BottomNav />
-        </AuthGuard>
+      <body className="min-h-full flex flex-col bg-slate-900 text-slate-100">
+        <AuthProvider>
+          <ToastProvider>
+            <AuthGuard>
+              <Header />
+              <main className="flex-1 pb-16 md:pb-0">{children}</main>
+              <BottomNav />
+            </AuthGuard>
+          </ToastProvider>
+        </AuthProvider>
       </body>
     </html>
   );

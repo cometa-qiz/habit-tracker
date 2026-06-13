@@ -39,7 +39,7 @@ export default function BottomNav() {
   if (pathname === '/login') return null;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-10 flex h-16 items-center justify-around border-t border-slate-800 bg-slate-900/90 backdrop-blur">
+    <nav className="fixed bottom-0 left-0 right-0 z-10 flex h-16 items-center justify-around border-t border-slate-800 bg-slate-900/90 backdrop-blur md:hidden">
       {NAV_ITEMS.map(({ href, label, icon }) => {
         const active = pathname === href;
         return (

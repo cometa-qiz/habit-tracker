@@ -1,8 +1,15 @@
 'use client';
 
 import { useState } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/useAuth';
+
+const NAV_LINKS = [
+  { href: '/', label: '今日' },
+  { href: '/stats', label: '統計' },
+  { href: '/habits', label: '習慣管理' },
+] as const;
 
 export default function Header() {
   const pathname = usePathname();
@@ -13,7 +20,30 @@ export default function Header() {
 
   return (
     <header className="sticky top-0 z-10 flex h-14 items-center justify-between bg-slate-900/90 px-4 backdrop-blur border-b border-slate-800">
-      <span className="font-bold text-white tracking-tight">習慣トラッカー</span>
+      <div className="flex items-center gap-6">
+        <span className="font-bold text-white tracking-tight">習慣トラッカー</span>
+        {/* デスクトップ用ナビリンク */}
+        {user && (
+          <nav className="hidden md:flex items-center gap-1">
+            {NAV_LINKS.map(({ href, label }) => {
+              const active = pathname === href;
+              return (
+                <Link
+                  key={href}
+                  href={href}
+                  className={`rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                    active
+                      ? 'bg-slate-800 text-indigo-400'
+                      : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
+                  }`}
+                >
+                  {label}
+                </Link>
+              );
+            })}
+          </nav>
+        )}
+      </div>
 
       {user && (
         <div className="relative">

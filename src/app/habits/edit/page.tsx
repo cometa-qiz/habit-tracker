@@ -3,7 +3,7 @@ import HabitEditClient from './HabitEditClient';
 
 export default function EditHabitPage() {
   return (
-    <div className="min-h-screen bg-slate-900 px-4 py-8">
+    <div className="min-h-screen bg-slate-900 px-4 pt-6 pb-24">
       <div className="mx-auto max-w-md">
         <h1 className="text-xl font-bold text-white mb-6">習慣を編集</h1>
         <Suspense
