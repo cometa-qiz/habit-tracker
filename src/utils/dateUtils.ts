@@ -29,6 +29,12 @@ export const subtractDays = (dateStr: string, n: number): string => {
 };
 
 /**
+ * 指定した日付が今日以前かどうかを返す（未来日は false）
+ */
+export const isPastOrToday = (dateStr: string): boolean =>
+  dateStr <= getTodayString();
+
+/**
  * 今週（月曜始まり）の日付文字列を配列で返す
  * 例: ['2026-06-08', '2026-06-09', ..., '2026-06-14']
  */
