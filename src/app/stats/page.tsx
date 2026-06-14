@@ -9,8 +9,6 @@ import MonthlyCalendar from '@/components/stats/MonthlyCalendar';
 import RateBarChart from '@/components/stats/RateBarChart';
 import {
   getWeekDayCells,
-  getMonthDayCells,
-  getMonthStartPadding,
   getWeeklyRates,
   getMonthlyRates,
 } from '@/utils/statsUtils';
@@ -42,20 +40,11 @@ export default function StatsPage() {
     [activeHabits, selectedId]
   );
 
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = now.getMonth() + 1;
-
   const weekDates = useMemo(() => getThisWeekDates(), []);
-  const startPadding = useMemo(() => getMonthStartPadding(year, month), [year, month]);
 
   const weeklyCells = useMemo(
     () => selectedHabit ? getWeekDayCells(selectedHabit, recordMap, weekDates) : [],
     [selectedHabit, recordMap, weekDates]
-  );
-  const monthlyCells = useMemo(
-    () => selectedHabit ? getMonthDayCells(selectedHabit, recordMap, year, month) : [],
-    [selectedHabit, recordMap, year, month]
   );
   const weeklyRates = useMemo(
     () => selectedHabit ? getWeeklyRates(selectedHabit, recordMap) : [],
@@ -115,12 +104,10 @@ export default function StatsPage() {
                   </section>
 
                   <section className="space-y-3">
-                    <h2 className="text-sm font-semibold text-slate-300">今月の達成カレンダー</h2>
+                    <h2 className="text-sm font-semibold text-slate-300">達成カレンダー</h2>
                     <MonthlyCalendar
-                      cells={monthlyCells}
-                      startPadding={startPadding}
-                      year={year}
-                      month={month}
+                      habit={selectedHabit}
+                      recordMap={recordMap}
                     />
                   </section>
                 </div>
