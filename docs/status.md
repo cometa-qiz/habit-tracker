@@ -198,8 +198,8 @@
 ### 入力UIの改善
 - [x] カテゴリの固定候補リストを定数として定義する（例: `健康` / `運動` / `勉強` / `仕事` / `生活` / `趣味` / `その他`）
 - [x] `EmojiPicker.tsx` を候補グリッドからの選択方式にする（自由入力を廃止）
-- [ ] `HabitForm.tsx` の絵文字入力を `EmojiPicker.tsx` に置き換える
-- [ ] `HabitForm.tsx` のカテゴリ入力を固定候補のプルダウン ＋「新規追加」入力の併用にする（`category` は string のまま）
+- [x] `HabitForm.tsx` の絵文字入力を `EmojiPicker.tsx` に置き換える
+- [x] `HabitForm.tsx` のカテゴリ入力を固定候補のプルダウン ＋「新規追加」入力の併用にする（`category` は string のまま）
 
 ### 過去日の記録修正（TODO記入忘れ対応）
 - [ ] `src/utils/dateUtils.ts` に日付選択・曜日判定のユーティリティを追加する（今日以前のみ許可）
