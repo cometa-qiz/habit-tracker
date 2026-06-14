@@ -2,6 +2,8 @@
 
 import { useState } from 'react';
 import type { Habit } from '@/types';
+import EmojiPicker from '@/components/ui/EmojiPicker';
+import { CATEGORY_PRESETS } from '@/lib/constants';
 
 const DAYS = ['日', '月', '火', '水', '木', '金', '土'] as const;
 
@@ -28,7 +30,12 @@ export default function HabitForm({ initialValues, onSubmit, onCancel }: Props) 
   const [name, setName] = useState(initialValues?.name ?? '');
   const [emoji, setEmoji] = useState(initialValues?.emoji ?? '✅');
   const [memo, setMemo] = useState(initialValues?.memo ?? '');
-  const [category, setCategory] = useState(initialValues?.category ?? '');
+  const initialCategory = initialValues?.category ?? '';
+  const initialIsCustom =
+    initialCategory !== '' &&
+    !(CATEGORY_PRESETS as readonly string[]).includes(initialCategory);
+  const [category, setCategory] = useState(initialCategory);
+  const [isCustom, setIsCustom] = useState(initialIsCustom);
   const [targetDays, setTargetDays] = useState<number[]>(
     initialValues?.targetDays ?? [0, 1, 2, 3, 4, 5, 6]
   );
@@ -113,14 +120,8 @@ export default function HabitForm({ initialValues, onSubmit, onCancel }: Props) 
 
       {/* 絵文字 */}
       <div>
-        <label className="block text-sm font-medium text-slate-300 mb-1">絵文字</label>
-        <input
-          type="text"
-          value={emoji}
-          onChange={(e) => setEmoji(e.target.value)}
-          placeholder="例: 🧘"
-          className="w-20 rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-white text-center text-xl focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        />
+        <label className="block text-sm font-medium text-slate-300 mb-2">絵文字</label>
+        <EmojiPicker value={emoji} onChange={setEmoji} />
       </div>
 
       {/* メモ */}
@@ -142,17 +143,40 @@ export default function HabitForm({ initialValues, onSubmit, onCancel }: Props) 
       {/* カテゴリ */}
       <div>
         <label className="block text-sm font-medium text-slate-300 mb-1">カテゴリ</label>
-        <input
-          type="text"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          maxLength={LIMITS.category}
-          placeholder="例: 健康"
-          className="w-full rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-        />
-        <p className={`text-xs mt-1 text-right ${category.length >= LIMITS.category ? 'text-red-400' : 'text-slate-500'}`}>
-          {category.length}/{LIMITS.category}
-        </p>
+        <select
+          value={isCustom ? '__custom__' : category}
+          onChange={(e) => {
+            if (e.target.value === '__custom__') {
+              setIsCustom(true);
+              setCategory('');
+            } else {
+              setIsCustom(false);
+              setCategory(e.target.value);
+            }
+          }}
+          className="w-full rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+        >
+          <option value="">選択してください</option>
+          {CATEGORY_PRESETS.map((preset) => (
+            <option key={preset} value={preset}>{preset}</option>
+          ))}
+          <option value="__custom__">新規追加...</option>
+        </select>
+        {isCustom && (
+          <input
+            type="text"
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            maxLength={LIMITS.category}
+            placeholder="カテゴリ名を入力"
+            className="mt-2 w-full rounded-lg bg-slate-700 border border-slate-600 px-3 py-2 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+          />
+        )}
+        {isCustom && (
+          <p className={`text-xs mt-1 text-right ${category.length >= LIMITS.category ? 'text-red-400' : 'text-slate-500'}`}>
+            {category.length}/{LIMITS.category}
+          </p>
+        )}
       </div>
 
       {/* 実施曜日 */}
