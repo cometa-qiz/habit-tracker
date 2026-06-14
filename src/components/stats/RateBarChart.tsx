@@ -52,6 +52,8 @@ export default function RateBarChart({ weekEntries, monthEntries }: Props) {
               tick={{ fill: '#94a3b8', fontSize: 11 }}
               axisLine={false}
               tickLine={false}
+              interval={view === 'week' ? 1 : 0}
+              tickFormatter={(label: string) => label.replace('週', '')}
             />
             <YAxis
               domain={[0, 100]}
