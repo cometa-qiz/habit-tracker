@@ -81,7 +81,9 @@ export const getWeeklyRates = (
       }
     }
 
-    const label = `${weekStart.getMonth() + 1}/${weekStart.getDate()}週`;
+    const weekEnd = new Date(weekStart);
+    weekEnd.setDate(weekStart.getDate() + 6);
+    const label = `${weekStart.getMonth() + 1}/${weekStart.getDate()}〜${weekEnd.getMonth() + 1}/${weekEnd.getDate()}`;
     return {
       label,
       rate: total === 0 ? 0 : Math.round((completed / total) * 100),

@@ -43,17 +43,19 @@ export default function RateBarChart({ weekEntries, monthEntries }: Props) {
       </div>
 
       {/* 棒グラフ */}
-      <div className="h-48">
+      <div className={view === 'week' ? 'h-56' : 'h-48'}>
         <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 4, right: 8, left: 4, bottom: 0 }}>
+          <BarChart data={data} margin={{ top: 4, right: 8, left: 4, bottom: view === 'week' ? 12 : 0 }}>
             <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
             <XAxis
               dataKey="label"
-              tick={{ fill: '#94a3b8', fontSize: 11 }}
               axisLine={false}
               tickLine={false}
-              interval={view === 'week' ? 1 : 0}
-              tickFormatter={(label: string) => label.replace('週', '')}
+              interval={0}
+              {...(view === 'week'
+                ? { angle: -30, textAnchor: 'end', tick: { fill: '#94a3b8', fontSize: 10 }, height: 50 }
+                : { tick: { fill: '#94a3b8', fontSize: 11 } }
+              )}
             />
             <YAxis
               domain={[0, 100]}
